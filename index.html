@@ -79,7 +79,40 @@
 <p>Vergessen Sie die Notwendigkeit, alle 3 Stunden ins Spiel zu gehen – unser Bot erledigt alles für Sie!</p>
 
 <a href="https://docs.google.com/forms/d/e/1FAIpQLSdRVlw5FVLPBHV3PKqspMAmB0fBNcM_ES0HD4ji-M-sUK5SyA/viewform?usp=sf_link" class="btn">Bot verbinden</a>
-<p>Die Kosten für die Verbindung zum Bot: 10 USDT / pro Monat</p>
+    <script>
+      async function getExchangeRate() {
+        try {
+          const response = await fetch(
+            "https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd"
+          );
+          const data = await response.json();
+          return data["the-open-network"].usd;
+        } catch (error) {
+          console.error("Error fetching exchange rate:", error);
+          return null;
+        }
+      }
+
+      async function convert() {
+        const usdAmount = 10;
+
+        const exchangeRate = await getExchangeRate();
+        if (!exchangeRate) {
+          alert("Unable to fetch exchange rate. Please try again later.");
+          return;
+        }
+
+        const tonAmount = usdAmount / exchangeRate;
+        document.getElementById(
+          "price"
+        ).innerText = `${usdAmount} USD (${tonAmount.toFixed(2)} TON)`;
+      }
+
+      convert();
+    </script>
+    <p>
+      Die Kosten für die Verbindung zum Bot:  <span id="price">10 USDT</span> / pro Monat
+    </p>
 
 <h3>Wie unser Bot funktioniert:</h3>
 <ol>
